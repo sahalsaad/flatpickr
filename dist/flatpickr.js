@@ -293,9 +293,9 @@ var Flatpickr = function () {
 			this.hourElement.tabIndex = this.minuteElement.tabIndex = 0;
 			this.hourElement.type = this.minuteElement.type = "number";
 
-			this.hourElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : 12;
+			this.hourElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : this.config.defaultHour;
 
-			this.minuteElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : "00";
+			this.minuteElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : this.config.defaultMinutes;
 
 			this.hourElement.step = this.config.hourIncrement;
 			this.minuteElement.step = this.config.minuteIncrement;
@@ -317,7 +317,7 @@ var Flatpickr = function () {
 
 				this.secondElement = Flatpickr.createElement("input", "flatpickr-second");
 				this.secondElement.type = "number";
-				this.secondElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : "00";
+				this.secondElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : this.config.defaultSeconds;
 
 				this.secondElement.step = this.minuteElement.step;
 				this.secondElement.min = this.minuteElement.min;
@@ -1151,7 +1151,11 @@ Flatpickr.defaultConfig = {
 	// called after calendar is ready
 	onReady: null, // function (dateObj, dateStr) {}
 
-	onValueUpdate: null
+	onValueUpdate: null,
+
+	defaultHour: "12",
+	defaultMinutes: "00",
+	defaultSeconds: "00"
 };
 
 Flatpickr.l10n = {
