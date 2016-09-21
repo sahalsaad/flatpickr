@@ -326,6 +326,10 @@ class Flatpickr {
 				"flatpickr-am-pm",
 				["AM", "PM"][(this.hourElement.value > 11) | 0]
 			);
+
+			this.hourElement.value =
+				this.hourElement.value % 12 == 0 ? "12" : Flatpickr.pad(this.hourElement.value % 12);
+
 			this.amPM.title = this.l10n.toggleTitle;
 			this.amPM.tabIndex = 0;
 			this.timeContainer.appendChild(this.amPM);
