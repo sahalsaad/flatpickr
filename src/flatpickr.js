@@ -2,6 +2,7 @@ class Flatpickr {
 	constructor(element, config) {
 		this.element = element;
 		this.instanceConfig = config || {};
+		this.calendarParent = null;
 
 		this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
 			.test(navigator.userAgent);
@@ -129,7 +130,8 @@ class Flatpickr {
 			this.element.parentNode.appendChild(this.calendarContainer);
 		}
 		else {
-			document.body.appendChild(this.calendarContainer);
+			this.calendarParent = this.config.calendarParent ? this.config.calendarParent : document.body;
+			this.calendarParent.appendChild(this.calendarContainer);
 		}
 	}
 
@@ -630,19 +632,20 @@ class Flatpickr {
 		const calendarHeight = this.calendarContainer.offsetHeight,
 			input = (this.altInput || this.input),
 			inputBounds = input.getBoundingClientRect(),
-			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
+			parentBoundTop = this.calendarParent.getBoundingClientRect().top,
+			parentTop = parentBoundTop - this.calendarParent.scrollTop ;
 
-		let top,
+		let top = (inputBounds.bottom - parentTop) + 4,
 			left = (window.pageXOffset + inputBounds.left);
 
-		if (distanceFromBottom < calendarHeight) {
-			top = (window.pageYOffset - calendarHeight + inputBounds.top) - 2;
+		if (inputBounds.top > (calendarHeight + input.offsetHeight) &&
+			(inputBounds.top - parentBoundTop - input.offsetHeight) > calendarHeight) {
+			top = top - calendarHeight - input.offsetHeight - 4;
 			this.calendarContainer.classList.remove("arrowTop");
 			this.calendarContainer.classList.add("arrowBottom");
 		}
 
 		else {
-			top = (window.pageYOffset + input.offsetHeight + inputBounds.top) + 2;
 			this.calendarContainer.classList.remove("arrowBottom");
 			this.calendarContainer.classList.add("arrowTop");
 		}
@@ -1113,7 +1116,9 @@ Flatpickr.defaultConfig = {
 	defaultMinutes: "00",
 
 	// set default hour for new fields
-	defaultSeconds: "00"
+	defaultSeconds: "00",
+
+	calendarParent: null
 };
 
 Flatpickr.l10n = {
